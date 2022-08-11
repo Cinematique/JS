@@ -18,3 +18,23 @@ function mythrottle(fn, delay) {
       // }
     };
   }
+
+  /* 节流 */
+const clickHandler = (e) => {
+  console.log("hello");
+};
+function throttle(fn, delay = 1000) {
+  let forbidTimer = null;
+
+  return function (...args) {
+    if (!forbidTimer) {
+      fn.apply(null, args);
+
+      // 1秒内不允许再有人来调用fn
+      forbidTimer = setTimeout(() => {
+        forbidTimer = null;
+      }, delay);
+    }
+  };
+}
+btn.addEventListener("click", throttle(clickHandler, 1000));

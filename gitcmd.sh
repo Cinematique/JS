@@ -8,5 +8,5 @@ git remote add origin https://gitee.com/he-pron/JS.git
 git remote -v
 
 git add .
-git commit -m "first commit"
+git commit -m "temp"
 git push -u origin master
