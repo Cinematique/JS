@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>微框架3</title>
+  </head>
+
+  <body>
+    <!-- 4个Dom元素挂载着2个【响应式数据】 -->
+    <h3 id="hMyname">{name}</h3>
+    <p id="pMyname">{name}</p>
+
+    <h3 id="hMyage">{age}</h3>
+    <p id="pMyage">{age}</p>
+
+    <p id="pGender">{gender}</p>
+
+    <script>
+      function defineReactive(data, keys = []) {
+        /* keys中有多少key 就定义多少个属性 */
+        keys.forEach(
+          // obj=>{}
+          ({ name, listeners }) => {
+            /* 一个name=一个响应式数据属性 */
+            Object.defineProperty(data, name, {
+              // 读取data.age
+              get() {
+                console.log("get", name);
+                return data[`x_${name}`];
+              },
+
+              // 设置data.age = 19
+              set(newValue) {
+                console.log("set", name, newValue);
+                data[`x_${name}`] = newValue;
+
+                /* 通知age的观察者来响应 */
+                // hMyage.innerText = newValue;
+                // pMyage.innerText = newValue;
+                listeners.forEach((dom) => (dom.innerText = newValue));
+              },
+              
+            });
+          }
+        );
+      }
+    </script>
+
+    <!-- 业务逻辑代码 -->
+    <script>
+      const data = {};
+
+      /* 提前定义响应式数据 */
+      defineReactive(data, [
+        { name: "age", listeners: [hMyage, pMyage] },
+        { name: "name", listeners: [hMyname, pMyname] },
+        { name: "gender", listeners: [pGender] },
+      ]);
+
+      /* 初始化响应式数据 */
+      data.name = "黑哥";
+      data.age = 18;
+      data.gender = "男";
+
+      /* 响应式数据动态变化 */
+      setInterval(() => {
+        data.name = Date.now();
+        data.age = data.age + 1;
+        data.gender = data.gender === "男" ? "女" : "男";
+      }, 1000);
+
+    </script>
+  </body>
+</html>

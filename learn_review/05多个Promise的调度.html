@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <script>
+      /* 
+        共荣期约：全都成功才算成功
+        全部resolve时得到values，任何一个reject时 得到err
+        场景：全部成功时 任务整体才成功
+        */
+      function promiseAll() {
+        Promise.all([
+          Promise.resolve(3),
+          Promise.reject(42),
+          new Promise(
+            (resolve, reject) => setTimeout(() => resolve("foo"), 5000)
+            //    (resolve,reject)=>setTimeout(()=>reject("我妈不让我和坏孩子玩"),5000)
+          ),
+        ])
+          .then((values) => console.log("values=", values))
+          .catch((err) => console.log("err=", err));
+      }
+      // promiseAll()
+
+      /* 
+        完全期约：保证所有promise完成其任务 并获得一个具体的结果列表
+        场景：一组无关联的并发任务 需要清楚知道每个Promise的最终状态
+        */
+      function promiseAllSettled() {
+        Promise.allSettled([
+          Promise.resolve(3),
+          Promise.resolve(42),
+          new Promise(
+            // (resolve, reject) => setTimeout(() => resolve("foo"), 5000)
+            (resolve, reject) =>
+              setTimeout(() => reject("我妈不让我和坏孩子玩"), 5000)
+          ),
+        ])
+          .then((values) => console.log("values=", values))
+      }
+      // promiseAllSettled();
+
+      /* 
+        竞速契约：以率先resolve/reject的promise的结果作为最终结果
+        一组并发任务，以率先resolve或reject出来的结果为最终结果
+        */
+      function promiseRace() {
+        Promise.race([
+          new Promise((resolve, reject) => {
+            setTimeout(resolve, 3000, "one");
+          }),
+
+          new Promise((resolve, reject) => {
+            //   1000毫秒后 回调reject 入参two
+            setTimeout(reject, 10000, "two");
+          }),
+
+          new Promise(
+            // (resolve, reject) => setTimeout(() => resolve("foo"), 5000)
+            (resolve, reject) =>
+              setTimeout(() => reject("我妈不让我和坏孩子玩"), 5000)
+          ),
+        ])
+          .then((value) => console.log("value=", value))
+          .catch((err) => console.log("err=", err));
+      }
+      promiseRace();
+    </script>
+  </body>
+</html>

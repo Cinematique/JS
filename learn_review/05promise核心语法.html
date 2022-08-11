@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <!-- new Promise 履约/毁约自由掌握-->
+    <!-- resolve 解决/（兑现） reject 拒绝/（毁约） -->
+    <!-- <script>
+        console.log("程序开始");
+
+        new Promise(
+
+            // 任务函数=执行器=executor
+            (resolve,reject)=>{
+                // 在里面慢吞吞地执行任务（请求网络、读取文件、下载教学视频...）
+                setTimeout(() => {
+                    // 最终要么履约，要么毁约
+                    if(Math.random()>0.5){
+                        console.log("Promise履约");
+                        resolve("成吨的钞票和美女")//fulfilled
+                    }else{
+                        console.log("Promise毁约");
+                        reject("一张好人卡")//rejected
+                    }
+                }, 3000);
+            }
+            
+        )
+
+        // Promise对象履约时回调
+        .then(
+            value=>{
+                console.log("then:value=",value);
+            }
+        )
+
+        // Promise对象毁约时回调
+        .catch(
+            err=>{
+                console.log("catch:err=",err);
+            }
+        )
+
+        console.log("game over");
+    </script> -->
+
+    <!-- Promise.resolve(value) 直接创建一个履约态的Promise对象 -->
+    <!-- <script>
+        console.log("程序开始");
+        Promise.resolve("大白兔奶糖")
+            .then(value => console.log("Promise已履约1", value))
+            .then(value => console.log("Promise已履约2", value))
+            .catch(err => console.error("Promise已毁约", err))
+
+        console.log("game over!");
+    </script> -->
+
+    <!-- Promise.reject(err) 直接创建一个毁约态的Promise对象 -->
+    <!-- <script>
+        console.log("程序开始");
+        Promise.reject("一张好人卡")
+            .then(value => console.log("Promise已履约", value))
+            .catch(err => console.error("Promise已毁约1", err))
+            .catch(err => console.error("Promise已毁约2", err))
+        console.log("game over");
+    </script> -->
+
+    <!-- 向后履约/毁约 -->
+    <!-- <script>
+      Promise.resolve(1)
+
+        .then((value) => {
+          console.log("then1:Promise已履约", value); //1
+
+          /* 
+          向后履约：
+          向流水线的下一环节交付一件良品（数据） 
+          then返回一个履约态（fulfilled/心满意足的）Promise对象 
+          继续就近找善事做=继续回调后面的then
+          */
+          // return value + 2;
+          // return Promise.resolve(value+2)
+
+          /* 
+          向后毁约 
+          向流水线的下一环节交付一件次品（Error）
+          then返回一个毁约态的（rejected/被拒绝的/沮沮丧丧的）Promise对象 
+          就近找坏事做（就近找catch回调）
+          */
+          // throw Error("一张好人卡");
+          return Promise.reject("猫咪喊我回家吃饭饭")
+        })
+
+        .then((value) => {
+          console.log("then2:Promise已履约", value);
+          return value + 4;
+        })
+
+        .then((value) => console.log("then3:Promise已履约", value))
+
+        .catch(
+            (err) => console.error("catch1:Promise已毁约", err)
+        )
+
+        .catch((err) => console.error("catch2:Promise已毁约", err))
+
+        // 不管前面怎么走 最终（finally）都会
+        .finally(() => console.log("人终有一死，或轻于鸿毛，或轻于绿帽"));
+    </script> -->
+  </body>
+</html>
